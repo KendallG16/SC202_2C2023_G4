@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
  *
  * @author kenda
  */
-public class Modulo1 {
+public class APP {
 
     public static void main(String[] args) {
         
