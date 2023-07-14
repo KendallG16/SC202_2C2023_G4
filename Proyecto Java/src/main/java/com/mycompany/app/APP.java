@@ -14,13 +14,19 @@ public class APP {
     public static void main(String[] args) {
         
         Medicos[] medicosArray = new Medicos[5];
-
+        
         for (int i = 0; i < 5; i++) {
             Medicos medico = new Medicos();
             medico.setNombreMedico(JOptionPane.showInputDialog(null, "Ingrese el nombre del médico " + (i + 1) + ":"));
             medico.setHoraAlmuerzo(JOptionPane.showInputDialog(null, "Ingrese la hora de almuerzo para el médico " + medico.getNombreMedico() + ":"));
-            medico.setEspecialidad(JOptionPane.showInputDialog(null, "Ingrese la especialidad del médico " + medico.getNombreMedico() + ":"));
             medicosArray[i] = medico;
+        }
+
+        String[] especialidades = {"Cirugía General", "Ginecología", "Neurología", "Dermatología", "Pediatría"};
+
+        for (int i = 0; i < especialidades.length; i++) {
+            Medicos medico = medicosArray[i];
+            medico.setEspecialidad(especialidades[i]);
         }
 
         for (int i = 0; i < 5; i++) {
@@ -54,10 +60,37 @@ public class APP {
                     JOptionPane.showMessageDialog(null, "Nuestro personal es:\n" + personal);
                     break;
                 case 1:
-                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 2");
+                    String cliente = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente:");
+                    String telefono = JOptionPane.showInputDialog(null, "Ingrese el teléfono del cliente:");
+
+                    String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+                    String dia = (String) JOptionPane.showInputDialog(null, "Seleccione el día de la cita:",
+                        "Seleccionar Día", JOptionPane.QUESTION_MESSAGE, null, diasSemana, diasSemana[0]);
+
+                    String[] serviciosMedicos = {"Cirugía General", "Ginecología", "Neurología", "Dermatología", "Pediatría"};
+                    String servicio = (String) JOptionPane.showInputDialog(null, "Seleccione el servicio médico:",
+                        "Seleccionar Servicio", JOptionPane.QUESTION_MESSAGE, null, serviciosMedicos, serviciosMedicos[0]);
+
+                    int horas = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad de horas necesarias:"));
+
+                    Cita cita = new Cita(cliente, telefono, dia, servicio, horas);
+                    String medico = cita.asignarMedico();
+                    float precio = cita.calcularPrecio();
+
+                    String mensaje = "Reservación de la cita:\n";
+                    mensaje += "Cliente: " + cita.getCliente() + "\n";
+                    mensaje += "Teléfono: " + cita.getTelefono() + "\n";
+                    mensaje += "Día: " + cita.getDia() + "\n";
+                    mensaje += "Servicio: " + cita.getServicio() + "\n";
+                    mensaje += "Horas: " + cita.getHoras() + "\n";
+                    mensaje += "Médico asignado: " + medico + "\n";
+                    mensaje += "Precio total: " + precio + " colones";
+
+                    JOptionPane.showMessageDialog(null, mensaje);                    
                     break;
                 case 2:
                     JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 3");
+
                     break;
                 case 3:
                     JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 4");
@@ -72,4 +105,3 @@ public class APP {
     }
     }       
 }
-
