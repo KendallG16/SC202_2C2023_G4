@@ -44,13 +44,30 @@ public class APP {
                 opciones,
                 opciones[0]);
 
-                switch (opcionSeleccionada) {
-                    case 0 -> JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 1");
-                    case 1 -> JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 2");
-                    case 2 -> JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 3");
-                    case 3 -> JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 4");
-                    case 4 -> salir = true;
-                    default -> salir = true;
+            switch (opcionSeleccionada) {
+                case 0:
+                    String personal = "";
+                    for (int i = 0; i < 5; i++) {
+                        personal += "Medico: " + medicosArray[i].getNombreMedico() + "\n";
+                        personal += "Especialidad: " + medicosArray[i].getEspecialidad() + "\n";
+                    }
+                    JOptionPane.showMessageDialog(null, "Nuestro personal es:\n" + personal);
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 2");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 3");
+                    break;
+                case 3:
+                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 4");
+                    break;
+                case 4:
+                    salir = true;
+                    break;
+                default:
+                    salir = true;
+                    break;
         }
     }
     }       
