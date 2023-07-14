@@ -1,4 +1,4 @@
-package com.mycompany.modulo1;
+package com.mycompany.app;
 
 public class Medicos {
 
