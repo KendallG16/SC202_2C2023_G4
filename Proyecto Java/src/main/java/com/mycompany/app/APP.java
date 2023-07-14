@@ -89,7 +89,20 @@ public class APP {
                     JOptionPane.showMessageDialog(null, mensaje);                    
                     break;
                 case 2:
-                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 3");
+                        boolean reservaEliminada = false;       
+                        String nombreClienteEliminar = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+                        String medicoEliminar = JOptionPane.showInputDialog("Ingrese el médico que lo iba a atender:");
+                        String FechaClienteEliminar = JOptionPane.showInputDialog("Ingrese el día de atención:");
+                        if (nombreClienteEliminar.equals(cliente.getNombrecliente()) && medicoEliminar.equals(medico.getNombreMedico())
+                                && FechaClienteEliminar.equals(cliente.getFechacliente())) {
+                          cliente.setBorrarCliente();
+                                
+                            reservaEliminada = true;
+                                
+                            JOptionPane.showMessageDialog(null, "Reserva eliminada exitosamente.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se encontró ninguna reserva con esos datos.");
+                        }
 
                     break;
                 case 3:
