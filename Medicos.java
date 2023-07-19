@@ -5,6 +5,7 @@ public class Medicos {
     private String NombreMedico = "";
     private String Especialidad = "";
     private String HoraAlmuerzo = "";
+    int horas = 7;
    
     public void setNombreMedico(String NombreMedico){
         this.NombreMedico = NombreMedico;
@@ -28,5 +29,11 @@ public class Medicos {
     public String getHoraAlmuerzo(){
         return HoraAlmuerzo;
     }
+<<<<<<< Updated upstream:Medicos.java
    
 }
+=======
+
+    
+}
+>>>>>>> Stashed changes:Proyecto Java/src/main/java/com/mycompany/app/Medicos.java
