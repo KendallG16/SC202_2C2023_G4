@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyecto;
+import java.util.List;
 import com.mycompany.proyecto.App;
 /**
  *
@@ -85,5 +86,13 @@ public class Cita {
         float iva = precio * 0.13f;
         return precio + iva;
     }
+    
+    public static boolean eliminarcita(List<Cita> cita1, String cliente){
+        boolean citaeliminada = cita1.removeIf(cita -> cita.getCliente().equals(cliente));
+        return citaeliminada;
+    }
+    
+    
+    
     
 }

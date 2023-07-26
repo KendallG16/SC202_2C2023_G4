@@ -4,6 +4,8 @@
 
 package com.mycompany.proyecto;
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author JAZ
@@ -16,6 +18,7 @@ public class App {
         String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
         String[] especialidades = {"Cirugía General", "Ginecología", "Neurología", "Dermatología", "Pediatría"};
         String[][] clientes = new String[4][198];
+        List<Cita> citasList = new ArrayList<>();
 
         
         for (int i = 0; i < 5; i++) {
@@ -32,7 +35,7 @@ public class App {
 
             boolean salir = false;
         while (!salir) {
-             String[] opciones = {"Consulta de personal ", "Agendar cita", "Devolucion de espacios", "Revision de agendas", "Nuestro personal" ,"Salir"};
+             String[] opciones = {"Consulta de personal ", "Agendar cita", "Devolucion de espacios", "Revision de agendas","Salir"};
                 int opcionSeleccionada = JOptionPane.showOptionDialog(
                 null,
                 "Seleccione una opción:",
@@ -64,6 +67,8 @@ public class App {
                     Cita cita = new Cita(cliente, telefono, dia, servicio, horas);
                     String medico = cita.asignarMedico(medicosArray);
                     float precio = cita.calcularPrecio();
+                    citasList.add(cita);
+
 
                     String mensaje = "Reservación de la cita:\n";
                     mensaje += "Cliente: " + cita.getCliente() + "\n";
@@ -78,8 +83,15 @@ public class App {
                                     
                     break;
                 case 2:
-                    JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 3");
-
+                    String clienteeliminar = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente a liminar su cita:");
+                    boolean resultado = Cita.eliminarcita(citasList, clienteeliminar);
+                    if (resultado == true){
+                        JOptionPane.showMessageDialog(null, "La cita se ha eliminado correctamente.");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "No se ha encontrado la Cita programada");
+                    }
+                    
+                    
                     break;
                 case 3:
                     JOptionPane.showMessageDialog(null, "Has seleccionado la Opción 4");
