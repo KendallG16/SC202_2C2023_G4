@@ -15,55 +15,101 @@ public class Cita {
     private String cliente;
     private String telefono;
     private String dia;
+    private String mes; 
     private String servicio;
     private int horas;
 
-    public Cita(String cliente, String telefono, String dia, String servicio, int horas) {
-        this.cliente = cliente;
-        this.telefono = telefono;
-        this.dia = dia;
-        this.servicio = servicio;
-        this.horas = horas;
-    }
+    public Cita(String cliente, String telefono, String dia, String servicio, int horas, String mes) {
+    this.cliente = cliente;
+    this.telefono = telefono;
+    this.dia = dia;
+    this.servicio = servicio;
+    this.horas = horas;
+    this.mes = mes;
+}
 
     
     
     public static void hacerCita(Medicos[] medicosArray) {
-        String cliente = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente:");
-        String telefono = JOptionPane.showInputDialog(null, "Ingrese el teléfono del cliente:");
-    
-        String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
-        String dia = (String) JOptionPane.showInputDialog(null, "Seleccione el día de la cita:",
+    String cliente = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente:");
+    String telefono = JOptionPane.showInputDialog(null, "Ingrese el teléfono del cliente:");
+
+    String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+    String dia = (String) JOptionPane.showInputDialog(null, "Seleccione el día de la cita:",
             "Seleccionar Día", JOptionPane.QUESTION_MESSAGE, null, diasSemana, diasSemana[0]);
-    
-        String[] serviciosMedicos = {"Cirugía General", "Dermatología", "Pediatría"};
-        String servicio = (String) JOptionPane.showInputDialog(null, "Seleccione el servicio médico:",
+
+    String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+    String mesSeleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione el mes de la cita:",
+            "Seleccionar Mes", JOptionPane.QUESTION_MESSAGE, null, meses, meses[0]);
+
+    int mes = -1;
+    for (int i = 0; i < meses.length; i++) {
+        if (meses[i].equals(mesSeleccionado)) {
+            mes = i;
+            break;
+        }
+    }
+
+    if (mes == -1) {
+        JOptionPane.showMessageDialog(null, "Mes no válido");
+        return;
+    }
+
+    String[] serviciosMedicos = {"Cirugía General", "Medicina General", "Cirugía Especializada"};
+    String servicio = (String) JOptionPane.showInputDialog(null, "Seleccione el servicio médico:",
             "Seleccionar Servicio", JOptionPane.QUESTION_MESSAGE, null, serviciosMedicos, serviciosMedicos[0]);
 
-        int horas = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad de horas necesarias:"));
-
-        Cita cita = new Cita(cliente, telefono, dia, servicio, horas);
-        String medicoAsignado = cita.asignarMedico(medicosArray, servicio);
-        float precioTotal = cita.calcularPrecio();
-
-        for (Medicos medico : medicosArray) {
-            if (medico.getNombreMedico().equalsIgnoreCase(medicoAsignado)) {
-                medico.hacerCita(cita); // Agregar la cita al calendario del médico
-                break;
-            }
-        }
-
-        String mensaje = "Reservación de la cita:\n";
-        mensaje += "Cliente: " + cita.getCliente() + "\n";
-        mensaje += "Teléfono: " + cita.getTelefono() + "\n";
-        mensaje += "Día: " + cita.getDia() + "\n";
-        mensaje += "Servicio: " + cita.getServicio() + "\n";
-        mensaje += "Horas: " + cita.getHoras() + "\n";
-        mensaje += "Médico asignado: " + medicoAsignado + "\n";
-        mensaje += "Precio total: " + precioTotal + " colones";
-    
-        JOptionPane.showMessageDialog(null, mensaje);
+    int horas;
+    if (servicio.equalsIgnoreCase("Cirugía General")) {
+        horas = 2;
+    } else if (servicio.equalsIgnoreCase("Cirugía Especializada")) {
+        horas = 3;
+    } else {
+        horas = 1;
     }
+    int horaSeleccionada = -1;
+
+    Cita cita = new Cita(cliente, telefono, dia, servicio, horas, mesSeleccionado);
+    String medicoAsignado = cita.asignarMedico(medicosArray, servicio);
+    float precioTotal = cita.calcularPrecio();
+
+    Medicos medicoSeleccionado = null;
+    for (Medicos medico : medicosArray) {
+        if (medico.getNombreMedico().equalsIgnoreCase(medicoAsignado)) {
+            medicoSeleccionado = medico;
+            medico.hacerCita(cita, mes, dia, horas);
+            break;
+        }
+    }
+
+    if (medicoSeleccionado != null) {
+        String[] horasDisponibles = medicoSeleccionado.getHorasDisponibles(mes, dia);
+        if (horasDisponibles.length > 0) {
+            String horaElegida = (String) JOptionPane.showInputDialog(null, "Seleccione la hora de la cita:",
+                    "Seleccionar Hora", JOptionPane.QUESTION_MESSAGE, null, horasDisponibles, horasDisponibles[0]);
+            horaSeleccionada = Integer.parseInt(horaElegida);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay horas disponibles para ese día.");
+            return;
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Error al asignar médico.");
+        return;
+    }
+
+    String mensaje = "Reservación de la cita:\n";
+    mensaje += "Cliente: " + cita.getCliente() + "\n";
+    mensaje += "Teléfono: " + cita.getTelefono() + "\n";
+    mensaje += "Día: " + cita.getDia() + "\n";
+    mensaje += "Mes: " + mesSeleccionado + "\n"; // Mostrar el nombre del mes
+    mensaje += "Servicio: " + cita.getServicio() + "\n";
+    mensaje += "Horas: " + cita.getHoras() + "\n";
+    mensaje += "Médico asignado: " + medicoAsignado + "\n";
+    mensaje += "Precio total: " + precioTotal + " colones";
+
+    JOptionPane.showMessageDialog(null, mensaje);
+}
+
     private static String obtenerDiaSemana(int indice) {
         String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
         return diasSemana[indice];
@@ -143,6 +189,7 @@ public class Cita {
         }
     }
 
+
     public String getCliente() {
         return cliente;
     }
@@ -181,6 +228,13 @@ public class Cita {
 
     public void setHoras(int horas) {
         this.horas = horas;
+    }
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
     }
 
     public String asignarMedico(Medicos[] medicosArray, String especialidad) {

@@ -46,7 +46,7 @@ public class Proyecto {
 
                     break;
                 case 4:
-                    //Medicos.consultarAgenda(medicosArray);
+                    Medicos.consultarAgenda(medicosArray);
 
                     break;
                 case 5:
