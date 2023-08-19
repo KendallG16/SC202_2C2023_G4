@@ -13,9 +13,12 @@ public class Proyecto {
 
     public static void main(String[] args) {
         
+        String[][][] calendario = new String[12][30][10];
+
+        
         Medicos[] medicosArray = new Medicos[5];
         
-        Medicos.IngresarDetalles(medicosArray);
+        Medicos.IngresarDetalles(medicosArray, calendario);
 
         boolean salir = false;
             
@@ -46,7 +49,7 @@ public class Proyecto {
 
                     break;
                 case 4:
-                    //Medicos.consultarAgenda(medicosArray);
+                    Medicos.consultarAgenda(medicosArray);
 
                     break;
                 case 5:

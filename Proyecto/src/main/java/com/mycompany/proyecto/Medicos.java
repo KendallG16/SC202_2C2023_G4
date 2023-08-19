@@ -19,65 +19,78 @@ public class Medicos {
     private String NombreMedico = "";
     private String Especialidad = "";
     private String HoraAlmuerzo = "";
-    private String[][][] calendario = new String[12][30][8]; // Calendario para cada médico
-
-    public Medicos(String nombreMedico, String especialidad, String horaAlmuerzo) {
+    private String[][][] calendario;
+    
+    
+    public Medicos(String nombreMedico, String especialidad, String horaAlmuerzo, String[][][] calendario) {
         this.NombreMedico = nombreMedico;
         this.Especialidad = especialidad;
         this.HoraAlmuerzo = horaAlmuerzo;
-        inicializarCalendario();
+        inicializarCalendario(calendario);
+
     }
 
     public Medicos() {
     } 
 
-    public void hacerCita(Cita cita) {
-        int mes = obtenerNumeroMes(cita.getDia()); // Implementa obtenerNumeroMes según tu necesidad
-        int dia = obtenerNumeroMes(cita.getDia()); // Implementa obtenerNumeroDia según tu necesidad
-        int horas = cita.getHoras();
+    public void hacerCita(Cita cita, int mes, String dia, int horas) {
+    int numeroMes = obtenerNumeroMes(mes);
+    int numeroDia = obtenerNumeroDia(dia);
 
-        for (int hora = 0; hora < calendario[mes][dia].length; hora++) {
-            if (calendario[mes][dia][hora] == null) {
-                if (horas == 0) {
-                    break;
-                }
-                calendario[mes][dia][hora] = cita.getCliente();
-                horas--;
+    for (int hora = 0; hora < calendario[numeroMes][numeroDia].length; hora++) {
+        if (calendario[numeroMes][numeroDia][hora] == null) {
+            if (horas == 0) {
+                break;
             }
-        }
-        if (horas > 0) {
-            JOptionPane.showMessageDialog(null, "No hay espacio disponible para la cita.");
+            calendario[numeroMes][numeroDia][hora] = cita.getCliente();
+            horas--;
         }
     }
+    if (horas > 0) {
+        JOptionPane.showMessageDialog(null, "No hay espacio disponible para la cita.");
+    }
+}
 
-    private int obtenerNumeroMes(String dia) {
+    private int obtenerNumeroMes(int mes) {
         return 0;
     }
     
-
-    public void inicializarCalendario() {
-        for (int mes = 0; mes < calendario.length; mes++) {
-            for (int dia = 0; dia < calendario[mes].length; dia++) {
-                for (int hora = 0; hora < calendario[mes][dia].length; hora++) {
+    private int obtenerNumeroDia(String dia) {
+        return 0;
+    }
+    
+    public void inicializarCalendario(String[][][] calendario) {
+    String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+    
+    for (int mes = 0; mes < calendario.length; mes++) {
+        for (int dia = 0; dia < calendario[mes].length; dia++) {
+            for (int hora = 0; hora < calendario[mes][dia].length; hora++) {
+                if (hora == 0 && dia == 0) {
+                    calendario[mes][dia][hora] = meses[mes];
+                    } 
+                else {
                     calendario[mes][dia][hora] = null;
+                    }
                 }
             }
         }
     }
+    
+    public static void IngresarDetalles(Medicos[] medicosArray, String[][][] calendario){
+        String[] especialidades = {"Cirugía General", "Medicina General", "Cirugía Especializada"};
 
-    public static void IngresarDetalles(Medicos[] medicosArray) {
         for (int i = 0; i < 5; i++) {
             Medicos medico = new Medicos();
             medico.setNombreMedico(JOptionPane.showInputDialog(null, "Ingrese el nombre del médico " + (i + 1) + ":"));
             medico.setHoraAlmuerzo(JOptionPane.showInputDialog(null, "Ingrese la hora de almuerzo para el médico " + medico.getNombreMedico() + ":"));
+            medico.setCalendario(calendario, medico); // Asignar el calendario después de haber creado la instancia
             medicosArray[i] = medico;
-        }
+         }
     
-        String[] especialidades = {"Cirugía General", "Dermatología", "Pediatría"};
-
         for (int i = 0; i < especialidades.length; i++) {
-            medicosArray[i].setEspecialidad(especialidades[i]);
+        medicosArray[i].setEspecialidad(especialidades[i]);
         }
+
     
         Random random = new Random();
         for (int i = especialidades.length; i < medicosArray.length; i++) {
@@ -108,7 +121,12 @@ public class Medicos {
     public String getEspecialidad(){
         return Especialidad;
     }
+    
+    public static void setCalendario(String[][][] calendario, Medicos medico) {
+    medico.calendario = calendario; 
+    }
 
+    
     public String[][][] getCalendario(){
         return calendario;
     }
@@ -124,7 +142,8 @@ public class Medicos {
     public static String asignarMedico(Medicos[] medicosArray) {
         return null;
     }
-public void consultarAgenda(Medicos[] medicosArray) {
+    
+    public static void consultarAgenda(Medicos[] medicosArray) {
     String nombreMedicoConsulta = JOptionPane.showInputDialog(null, "Ingrese el nombre del médico para consultar su agenda:");
     boolean encontrado = false;
 
@@ -139,7 +158,7 @@ public void consultarAgenda(Medicos[] medicosArray) {
                 for (int dia = 0; dia < medicoCalendario[mes].length; dia++) {
                     for (int hora = 0; hora < medicoCalendario[mes][dia].length; hora++) {
                         if (medicoCalendario[mes][dia][hora] != null) {
-                            agenda += "Mes: " + mes + ", Día: " + dia + ", Hora: " + hora + ":00 - Cliente: " + medicoCalendario[mes][dia][hora] + "\n";
+                            agenda += "Mes: " + (mes + 1) + ", Día: " + (dia + 1) + ", Hora: " + hora + ":00 - Cliente: " + medicoCalendario[mes][dia][hora] + "\n";
                         }
                     }
                 }
@@ -158,5 +177,26 @@ public void consultarAgenda(Medicos[] medicosArray) {
         JOptionPane.showMessageDialog(null, "Médico no encontrado.");
     }
 }
-   
+    public String[] getHorasDisponibles(int mes, String dia) {
+    int mesIndex = obtenerNumeroMes(mes);
+    int diaIndex = obtenerNumeroDia(dia);
+
+    String[] horasDisponibles = new String[calendario[mesIndex][diaIndex].length];
+    int contadorHoras = 0;
+
+    for (int hora = 0; hora < calendario[mesIndex][diaIndex].length; hora++) {
+        int horaReal = hora + 8;
+        if (horaReal <= 18 && calendario[mesIndex][diaIndex][hora] == null) {
+            horasDisponibles[contadorHoras] = String.valueOf(horaReal);
+            contadorHoras++;
+        }
+    }
+
+    String[] horasFinales = new String[contadorHoras];
+    for (int i = 0; i < contadorHoras; i++) {
+        horasFinales[i] = horasDisponibles[i];
+    }
+
+    return horasFinales;
+}
 }
